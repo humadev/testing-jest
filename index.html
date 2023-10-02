@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Simple Todo App</title>
+</head>
+<body>
+  <h1>Todo List</h1>
+  
+  <form id="add-task-form">
+    <label for="task">Task:</label>
+    <input type="text" id="task" name="task">
+    <button type="submit">Add Task</button>
+  </form>
+
+  <ul id="task-list">
+    <!-- List items will be added here -->
+  </ul>
+
+  <script src="todo.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const taskList = document.getElementById('task-list');
+      const addTaskForm = document.getElementById('add-task-form');
+      const todo = new Todo();
+
+      addTaskForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const task = e.target.task.value;
+        todo.addTask(task);
+
+        const listItem = document.createElement('li');
+        listItem.textContent = task;
+        taskList.appendChild(listItem);
+
+        e.target.reset();
+      });
+    });
+  </script>
+</body>
+</html>
