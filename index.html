@@ -2,39 +2,72 @@
 <html>
 <head>
   <title>Simple Todo App</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
 </head>
 <body>
-  <h1>Todo List</h1>
-  
-  <form id="add-task-form">
-    <label for="task">Task:</label>
-    <input type="text" id="task" name="task">
-    <button type="submit">Add Task</button>
-  </form>
+  <div class="container">
+    <h1>Todo List</h1>
+    
+    <form id="add-task-form">
+      <input type="text" id="task" name="task">
+      <button type="submit">Add Task</button>
+    </form>
 
-  <ul id="task-list">
-    <!-- List items will be added here -->
-  </ul>
+    <ul id="task-list">
+      <!-- List items will be added here -->
+    </ul>
+  </div>
 
   <script src="todo.js"></script>
   <script>
+    const todo = new Todo();
     document.addEventListener('DOMContentLoaded', function() {
       const taskList = document.getElementById('task-list');
       const addTaskForm = document.getElementById('add-task-form');
-      const todo = new Todo();
 
       addTaskForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const task = e.target.task.value;
         todo.addTask(task);
-
-        const listItem = document.createElement('li');
-        listItem.textContent = task;
-        taskList.appendChild(listItem);
-
+        refreshList();
         e.target.reset();
       });
     });
+
+    function removeTask(i) {
+        todo.removeTask(i);
+        refreshList();
+    }
+
+    function markDone(i) {
+        todo.markAsCompleted(i);
+        refreshList();
+    }
+
+    function refreshList() {
+        const taskList = document.getElementById('task-list');
+        taskList.textContent = '';
+        todo.tasks.forEach(task => {
+            const listItem = document.createElement('li');
+            const buttonRemove = document.createElement('button');
+            const buttonDone = document.createElement('button');
+            buttonRemove.innerText = 'remove';
+            buttonRemove.onclick = () => removeTask(task.task);
+            buttonDone.innerText = 'done';
+            buttonDone.onclick = () => markDone(task.task);
+            const buttonDiv = document.createElement('div');
+            listItem.textContent = task.task;
+            if(task.completed) {
+                listItem.setAttribute('class', 'done');
+                buttonDiv.append(buttonRemove);
+            } else {
+                buttonDiv.append(buttonDone);
+            }
+            listItem.append(buttonDiv);
+            
+            taskList.appendChild(listItem);
+        });
+    }
   </script>
 </body>
 </html>

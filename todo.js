@@ -1,4 +1,5 @@
 class Todo {
+    tasks = [];
     constructor() {
       this.tasks = [];
     }
